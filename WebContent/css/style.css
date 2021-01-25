@@ -35,6 +35,11 @@ li{
     margin-bottom:10px;
 }
 
+p{
+    margin-top:15px;
+    margin-bottom:15px;
+}
+
 a{
     text-dexoration:nane;
     color:#24738e;
@@ -104,4 +109,8 @@ tr.row1{
 
 tr.row0{
     backgtound-color:#ffffff;
+}
+
+select{
+    height: 30px;
 }
