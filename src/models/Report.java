@@ -61,6 +61,17 @@ public class Report {
 
     @Column(name="updated_at",nullable=false)
     private Timestamp updated_at;
+    
+    @Column(name="reaction",nullable=false)
+    private Integer reaction;
+
+    public Integer getReaction() {
+        return reaction;
+    }
+
+    public void setReaction(Integer reaction) {
+        this.reaction = reaction;
+    }
 
     public Integer getId() {
         return id;
