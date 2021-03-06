@@ -1,4 +1,4 @@
-package controllers.reports;
+package controllers.likes;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,20 +11,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import models.Like;
 import models.Report;
 import utils.DBUtil;
 
 /**
- * Servlet implementation class ReportsIndexServlet
+ * Servlet implementation class LikesListServlet
  */
-@WebServlet("/reports/index")
-public class ReportsIndexServlet extends HttpServlet {
+@WebServlet("/likes/list")
+public class LikesListServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ReportsIndexServlet() {
+    public LikesListServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -36,34 +37,35 @@ public class ReportsIndexServlet extends HttpServlet {
         //DBに接続
         EntityManager em=DBUtil.createEntityManager();
 
+        Report r=em.find(Report.class, Integer.parseInt(request.getParameter("likelist")));
+
         int page;
         try{
             page=Integer.parseInt(request.getParameter("page"));
         }catch(Exception e){
             page=1;
         }
-        //reportクラスのクエリを選択
-        List<Report>reports=em.createNamedQuery("getAllReports",Report.class)
+
+        //likeクラスのクエリを選択
+        List<Like>likes=em.createNamedQuery("getMyAllLikes",Like.class)
+                .setParameter("report", r)
                 .setFirstResult(15*(page-1))
                 .setMaxResults(15)
                 .getResultList();
 
-        long reports_count=(long)em.createNamedQuery("getReportsCount",Long.class)
+        long likes_count=(long)em.createNamedQuery("getMyLikesCount",Long.class)
+                .setParameter("report", r)
                 .getSingleResult();
 
         em.close();
 
         //リクエストスコープにセット
-        request.setAttribute("reports", reports);
-        request.setAttribute("reports_count", reports_count);
+        request.setAttribute("likes", likes);
+        request.setAttribute("likes_count", likes_count);
         request.setAttribute("page", page);
-        if(request.getSession().getAttribute("flush")!=null){
-            request.setAttribute("flush", request.getSession().getAttribute("flush"));
-            request.getSession().removeAttribute("flush");
-        }
+        request.setAttribute("report", r);
 
-        RequestDispatcher rd=request.getRequestDispatcher("/WEB-INF/views/reports/index.jsp");
+        RequestDispatcher rd=request.getRequestDispatcher("/WEB-INF/views/likes/like.jsp");
         rd.forward(request, response);
     }
-
 }

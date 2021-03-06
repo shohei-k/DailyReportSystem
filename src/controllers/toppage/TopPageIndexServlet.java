@@ -34,6 +34,8 @@ public class TopPageIndexServlet extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        //DBに接続
         EntityManager em=DBUtil.createEntityManager();
 
         Employee login_employee=(Employee)request.getSession().getAttribute("login_employee");
@@ -44,6 +46,8 @@ public class TopPageIndexServlet extends HttpServlet {
         }catch(Exception e){
             page=1;
         }
+
+        //reportクラスのクエリを選択
         List<Report>reports=em.createNamedQuery("getMyAllReports",Report.class)
                 .setParameter("employee", login_employee)
                 .setFirstResult(15*(page-1))
@@ -56,6 +60,7 @@ public class TopPageIndexServlet extends HttpServlet {
 
         em.close();
 
+        //リクエストスコープにセット
         request.setAttribute("reports", reports);
         request.setAttribute("reports_count", reports_count);
         request.setAttribute("page", page);

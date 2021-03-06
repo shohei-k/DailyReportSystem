@@ -24,7 +24,14 @@
                         <td class="report_name"><c:out value="${report.employee.name }"/></td>
                         <td class="report_date"><fmt:formatDate value='${report.report_date }' pattern='yyyy-MM-dd' /></td>
                         <td class="report_title">${report.title }</td>
-                        <td class="report_reaction">${report.reaction }</td>
+                        <c:choose>
+                            <c:when test="${report.reaction>0 }">
+                                <td class="report_reaction"><a href="<c:url value='/likes/list?likelist=${report.id }' />">${report.reaction }</a></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td class="report_reaction">${report.reaction }</td>
+                            </c:otherwise>
+                        </c:choose>
                         <td class="report_action"><a href="<c:url value='/reports/show?id=${report.id }' />">詳細を見る</a></td>
                     </tr>
                 </c:forEach>

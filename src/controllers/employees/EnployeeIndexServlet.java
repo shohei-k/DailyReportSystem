@@ -33,12 +33,16 @@ public class EnployeeIndexServlet extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        //DBに接続
         EntityManager em=DBUtil.createEntityManager();
 
         int page=1;
         try{
             page=Integer.parseInt(request.getParameter("page"));
         }catch(NumberFormatException e){}
+
+        //employeeクラスのクエリを選択
         List<Employee> employees=em.createNamedQuery("getAllEmployees",Employee.class)
                 .setFirstResult(15*(page-1))
                 .setMaxResults(15)
@@ -49,6 +53,7 @@ public class EnployeeIndexServlet extends HttpServlet {
 
         em.close();
 
+        //リクエストスコープにセット
         request.setAttribute("employees", employees);
         request.setAttribute("employees_count", employees_count);
         request.setAttribute("page", page);

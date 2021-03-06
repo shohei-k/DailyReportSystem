@@ -37,7 +37,14 @@
                         </tr>
                         <tr>
                             <th>いいね</th>
-                            <td><c:out value="${report.reaction }" /></td>
+                            <c:choose>
+                                <c:when test="${report.reaction>0 }">
+                                    <td class="report_reaction"><a href="<c:url value='/likes/list?likelist=${report.id }' />">${report.reaction }</a></td>
+                                </c:when>
+                                <c:otherwise>
+                                    <td class="report_reaction">${report.reaction }</td>
+                                </c:otherwise>
+                            </c:choose>
                         </tr>
                     </tbody>
                 </table>
@@ -47,7 +54,9 @@
                         <p><a href="<c:url value="/reports/edit?id=${report.id }" />">この日報を編集する</a></p>
                     </c:when>
                     <c:otherwise>
-                        <p><a href="<c:url value="/reports/reaction?reaction=${report.id }"/>">この日報にいいねする</a></p>
+                        <c:if test="${likesCount == 0 }">
+                            <p><a href="<c:url value="/reports/reaction?reaction=${report.id }"/>">この日報にいいねする</a></p>
+                        </c:if>
                     </c:otherwise>
                 </c:choose>
             </c:when>

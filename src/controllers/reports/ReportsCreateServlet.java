@@ -37,8 +37,10 @@ public class ReportsCreateServlet extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //CSRF対策のチェック
         String _token=(String)request.getParameter("_token");
         if(_token !=null&&_token.equals(request.getSession().getId())){
+            //DBに接続
             EntityManager em=DBUtil.createEntityManager();
 
             Report r=new Report();
@@ -63,6 +65,7 @@ public class ReportsCreateServlet extends HttpServlet {
             r.setReaction(0);
 
             List<String> errors=ReportValidator.validate(r);
+            //間違いがないかチェック
             if(errors.size()>0){
                 em.close();
 

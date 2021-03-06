@@ -32,14 +32,20 @@ public class EmployeesDestroySevrlet extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //CSRF対策のチェック
         String _token=(String)request.getParameter("_token");
         if(_token !=null&&_token.equals(request.getSession().getId())){
+            
+            //DBに接続
             EntityManager em=DBUtil.createEntityManager();
 
             Employee e=em.find(Employee.class, (Integer)(request.getSession().getAttribute("employee_id")));
+            
+            //デリートフラグを登録する
             e.setDelete_flag(1);
             e.setUpdated_at(new Timestamp(System.currentTimeMillis()));
 
+            //DBにコミットする
             em.getTransaction().begin();
             em.getTransaction().commit();
             em.close();

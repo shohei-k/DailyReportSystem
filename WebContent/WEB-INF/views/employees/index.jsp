@@ -42,7 +42,7 @@
                         <c:out value="${i }"/>&nbsp;
                     </c:when>
                     <c:otherwise>
-                        <a href="<c:url value='employees/index?page=${i }'/>"><c:out value="${i }"/></a>
+                        <a href="<c:url value='/employees/index?page=${i }'/>"><c:out value="${i }"/></a>
                     </c:otherwise>
                 </c:choose>
             </c:forEach>

@@ -36,8 +36,12 @@ public class EmployeesCreateServlet extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        //CSRF対策のチェック
         String _token=(String)request.getParameter("_token");
         if(_token != null&&_token.equals(request.getSession().getId())){
+            
+            //データベースに接続
             EntityManager em=DBUtil.createEntityManager();
 
             Employee e=new Employee();
@@ -58,6 +62,8 @@ public class EmployeesCreateServlet extends HttpServlet {
             e.setDelete_flag(0);
 
             List<String>errors=EmployeeValidator.validate(e,true,true);
+            
+            //入力内容に間違いがないかチェック
             if(errors.size()>0){
                 em.close();
 

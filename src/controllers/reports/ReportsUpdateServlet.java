@@ -37,8 +37,11 @@ public class ReportsUpdateServlet extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //CSRF対策のチェック
         String _token=(String)request.getParameter("_token");
         if(_token != null && _token.equals(request.getSession().getId())){
+
+            //DBに接続
             EntityManager em=DBUtil.createEntityManager();
 
             Report r=em.find(Report.class, (Integer)(request.getSession().getAttribute("report_id")));
@@ -49,6 +52,8 @@ public class ReportsUpdateServlet extends HttpServlet {
             r.setUpdated_at(new Timestamp(System.currentTimeMillis()));
 
             List<String> errors = ReportValidator.validate(r);
+
+            //エラーが無いかチェック
             if(errors.size()>0){
                 em.close();
 

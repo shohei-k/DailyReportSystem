@@ -32,12 +32,15 @@ public class EmployeesEditServlet extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        //DBに接続
         EntityManager em=DBUtil.createEntityManager();
 
         Employee e=em.find(Employee.class, Integer.parseInt(request.getParameter("id")));
 
         em.close();
 
+        //employeeのデータをリクエストスコープにセット
         request.setAttribute("employee", e);
         request.setAttribute("_token", request.getSession().getId());
         request.getSession().setAttribute("employee_id",e.getId());
